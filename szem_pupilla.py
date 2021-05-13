@@ -5,7 +5,7 @@ import face_recognition
 import screeninfo
 import random
 import time 
-from scipy.ndimage.interpolation import shift
+
 
 # pislantas kepek
 feligcsukva = cv2.imread("feligcsukva.png",0)
