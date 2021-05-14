@@ -8,8 +8,11 @@ import time
 
 # pislantas kepek
 feligcsukva = cv2.imread("feligcsukva.png",0)
+feligcsukva = np.hstack([feligcsukva, feligcsukva])
 felignyitva = cv2.imread("felignyitva.png",0)
+felignyitva = np.hstack([felignyitva, felignyitva])
 csukva = cv2.imread("csukva.png",0)
+csukva = np.hstack([csukva, csukva])
 
 # meret szorzo
 multi = 2
@@ -41,7 +44,7 @@ cv2.setWindowProperty(window_name, cv2.WND_PROP_FULLSCREEN,cv2.WINDOW_FULLSCREEN
 
 while True:
     # alap kep
-    img = np.zeros((width, height, 3))+255
+    img = np.zeros((800, 800, 3))+255
     
     # kep olvasas
     ret, frame = video_capture.read()
@@ -79,8 +82,10 @@ while True:
             
     try:
         image = cv2.circle(img,(600*(int(640-np.mean(x_list)))//width_cap-50, 600*(int(np.mean(y_list)))//height_cap+250), 100, (0,0,0), -1)
+        image = np.hstack([image, image])
     except ValueError:
         image = cv2.circle(img,(411,411), 100, (0,0,0), -1)
+        image = np.hstack([image, image])
         print("Nincs arc....!")
         
     # debughoz

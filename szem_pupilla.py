@@ -5,12 +5,15 @@ import face_recognition
 import screeninfo
 import random
 import time 
-
+from scipy.ndimage.interpolation import shift
 
 # pislantas kepek
 feligcsukva = cv2.imread("feligcsukva.png",0)
+feligcsukva = np.hstack([feligcsukva, feligcsukva])
 felignyitva = cv2.imread("felignyitva.png",0)
+felignyitva = np.hstack([felignyitva, felignyitva])
 csukva = cv2.imread("csukva.png",0)
+csukva = np.hstack([csukva, csukva])
 
 pupil = cv2.imread("pupil4.png")
 
@@ -68,11 +71,19 @@ while True:
         cv2.rectangle(frame, (left*multi, top*multi), (right*multi, bottom*multi), (255, 255, 255), 2)
         x_list.append(left+right)
         y_list.append(top+bottom)
+        ######
+        #image = np.roll(np.roll(pupil, int(140-280*(np.mean(x_list))/width_cap)+50, axis = 1), int(-140+280*(np.mean(y_list))/height_cap)+50, axis = 0)
+        #image = np.hstack([image, image])
+        ######
         if len(x_list)>10:
             x_list.pop(0)
             y_list.pop(0)
     else:    
         no_face+=1
+        ###############
+        #image = shift(pupil, (0,0,0), cval=255) #cv2.circle(img,(411,411), 100, (0,0,0), -1)
+        #image = np.hstack([image, image])
+        ###############
         if no_face > 50:
             x_list.append((width_cap+11)//2)
             y_list.append((height_cap-125)//2)
@@ -82,13 +93,15 @@ while True:
             
     try:
         image = np.roll(np.roll(pupil, int(140-280*(np.mean(x_list))/width_cap)+50, axis = 1), int(-140+280*(np.mean(y_list))/height_cap)+50, axis = 0)
+        image = np.hstack([image, image])
         #cv2.circle(img,(600*(int(640-np.mean(x_list)))//width_cap-50, 600*(int(np.mean(y_list)))//height_cap+250), 100, (0,0,0), -1)
     except ValueError:
         image = shift(pupil, (0,0,0), cval=255) #cv2.circle(img,(411,411), 100, (0,0,0), -1)
+        image = np.hstack([image, image])
         print("Nincs arc....!")
         
     # debughoz
-    # cv2.imshow('Video', frame)
+    cv2.imshow('Video', frame)
     
     print(blink)
     blink -=1
